@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include<conio.h>
-#include <cstring>
+#include <string.h>
 #include <stdlib.h>
+#include<stdbool.h>
 
 struct fichaCarro{
  	char piloto[30];
@@ -11,7 +12,7 @@ struct fichaCarro{
 } fichaCarro;
 
 typedef struct Rally{
-	struct fichaCarro carros[];
+	struct fichaCarro carros[100];
 	int total;	
 } Rally;
 
@@ -23,8 +24,7 @@ void resultado(int i);
 void proc_piloto();
 
 int main(int argc, char** argv){
-
-int op;
+	int op;
 
 do{
 system("cls");
@@ -53,7 +53,7 @@ scanf("%i",&op);
 			break;		
 	}
 
-}while(op != 3);
+}while(op != 4);
 
 return 0;
 }
@@ -103,26 +103,34 @@ void listar_ficha(){
 }
 
 void proc_piloto(){
-	int i = 1;
-	char elem[50];
-	
-	printf("Digite o nome do piloto:\n");
-	scanf("%s",&elem);
-	
-	fflush(stdin);
-	
-	strcpy(rally.carros[rally.total + 1].piloto,elem);
 
-	while(strcmp(rally.carros[i].piloto, elem) != 0){	
-		i+=1;
+	char elem[30];
+	int esq, dir, meio;
+	int comp;
+	
+	esq = 0;
+	dir = rally.total;
+	
+	printf("Digite o indice do piloto:\n");
+	scanf("%s",&elem);
+	printf("%s\n",elem);
+	fflush(stdin);
+	while(esq <= dir){
+		meio = (esq + dir) / 2;
+		comp = strcmp(strupr(elem),strupr(rally.carros[meio].piloto));
+		
+		printf("%i\n",comp);
+		if(comp < 0){
+			dir = meio - 1;
+		}else if(comp > 0){
+			esq = meio +1;
+		}
+	
 	}
-	printf("\nTotal: %i\n:",rally.total);
-	if(i == rally.total + 1){
-		i = 0;
-		printf("Piloto nao encontrado!\n");
-	}else{
-		resultado(i);
-	}
+	
+	
+	
+	
 	system("pause");
 	
 }
@@ -133,6 +141,4 @@ void resultado(int i){
 	printf("Tempo: %2.f\n",rally.carros[i].tempo);
 	printf("Classificacao: %i\n\n",rally.carros[i].classificacao);
 }
-
-
 
